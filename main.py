@@ -27,12 +27,12 @@ class MainWindow:
         ScrollArea(main_frame).pack(expand=True, fill=BOTH)
 
         # Button area
-        button_frame = ttk.Frame(main_frame, padding=7.5, style="button_frame.TFrame")
+        button_frame = ttk.Frame(main_frame, style="button_frame.TFrame")
 
-        ttk.Button(button_frame, text="Beenden", command=lambda: root.quit(), style="button_frame.TButton").pack(side=RIGHT, padx=(7.5, 0))
+        ttk.Button(button_frame, text="Beenden", command=lambda: root.quit(), style="button_frame.TButton").pack(side=RIGHT, padx=7.5)
         ttk.Button(button_frame, text="Bestätigen", style="button_frame.TButton").pack(side=RIGHT)
 
-        button_frame.pack(fill=X)
+        button_frame.pack(fill=X, ipady=7.5)
 
         # Styling
         s = ttk.Style(main_frame)
