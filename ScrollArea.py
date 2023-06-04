@@ -13,7 +13,7 @@ class ScrollArea(ttk.Frame):
 
         # Scroll
         content_canvas.configure(yscrollcommand=scrollbar.set)
-        content_canvas.bind("<Configure>", lambda event: self.update_frame(content_canvas, content_frame, frame_id))
+        content_canvas.bind("<Configure>", lambda event: self.update_scrollbar_and_frame(content_canvas, content_frame, frame_id))
         content_canvas.bind_all("<MouseWheel>", lambda event: content_canvas.yview_scroll(int(-1 * (event.delta / 120)), UNITS))
 
         content_frame = ttk.Frame(content_canvas)
@@ -24,8 +24,7 @@ class ScrollArea(ttk.Frame):
         for number in range(1, 31):
             ttk.Button(content_frame, text=f"This is {number}, Yeah!").pack()
     
-    def update_frame(self, canvas: Canvas, inner_frame: ttk.Frame, frame_id: int):
-        #self.content_canvas.configure(scrollregion=self.content_canvas.bbox("all"))
+    def update_scrollbar_and_frame(self, canvas: Canvas, inner_frame: ttk.Frame, frame_id: int):
         canvas.config(scrollregion=canvas.bbox("all"))
 
         if inner_frame.winfo_width() != canvas.winfo_width():
