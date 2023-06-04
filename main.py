@@ -24,16 +24,15 @@ class MainWindow:
         main_frame = ttk.Frame(root).pack()
 
         # Scroll area
-        scroll_area = ScrollArea(main_frame)
+        ScrollArea(main_frame).pack(expand=True, fill=BOTH)
 
-        # Buttons
+        # Button area
         button_frame = ttk.Frame(main_frame, padding=7.5, style="button_frame.TFrame")
 
         ttk.Button(button_frame, text="Beenden", command=lambda: root.quit(), style="button_frame.TButton").pack(side=RIGHT, padx=(7.5, 0))
         ttk.Button(button_frame, text="Bestätigen", style="button_frame.TButton").pack(side=RIGHT)
 
-        button_frame.pack(fill=X, side=BOTTOM)
-        scroll_area.pack(expand=True, fill=BOTH)
+        button_frame.pack(fill=X)
 
         # Styling
         s = ttk.Style(main_frame)
