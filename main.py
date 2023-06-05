@@ -1,5 +1,6 @@
 import ctypes
 import os
+import sys
 from tkinter import *
 from tkinter import ttk
 from GarbageInfo import *
@@ -29,7 +30,7 @@ class MainWindow:
         root.geometry(f"{standard_width}x{standard_heigth}+{top_left_x}+{top_left_y}")
 
         # Loading icon needs time, window size should be set before
-        root.iconbitmap("images/bin.ico")
+        #root.iconbitmap(self.resource_path("images/bin.ico"))
 
         # Main frame
         main_frame = ttk.Frame(root).pack()
@@ -41,7 +42,7 @@ class MainWindow:
         button_frame = ttk.Frame(main_frame, style="button_frame.TFrame", padding=(0, 7.5, 7.5, 7.5))
 
         ttk.Button(button_frame, text="Beenden", command=lambda: root.quit(), style="button_frame.TButton", takefocus=False).pack(side=RIGHT, padx=(7.5, 0))
-        ttk.Button(button_frame, text="Bestätigen", command=self.confirm_action, style="button_frame.TButton", takefocus=False).pack(side=RIGHT)
+        ttk.Button(button_frame, text="Bestätigen", command=self.run_garbage_collector, style="button_frame.TButton", takefocus=False).pack(side=RIGHT)
 
         button_frame.pack(fill=X)
 
@@ -50,8 +51,10 @@ class MainWindow:
         s.configure("button_frame.TFrame", background="lightgrey")
         s.configure("button_frame.TButton", background="lightgrey")
 
-    def confirm_action(self):
-        print("continue")
+    def run_garbage_collector(self):
+        for item in garbage_list:
+            #print(item)
+            return
 
     @staticmethod
     def is_admin():
@@ -60,6 +63,17 @@ class MainWindow:
         except AttributeError:
             is_admin = ctypes.windll.shell32.IsUserAnAdmin()
         return is_admin
+    
+    @staticmethod
+    def resource_path(relative_path):
+        """ Get absolute path to resource, works for dev and for PyInstaller """
+        try:
+            # PyInstaller creates a temp folder and stores path in _MEIPASS
+            base_path = sys._MEIPASS
+        except Exception:
+            base_path = os.path.abspath(".")
+
+        return os.path.join(base_path, relative_path)
 
 if __name__ == "__main__":
     garbage_list: tuple[str, GarbageInfo, None] = [    
@@ -114,9 +128,6 @@ if __name__ == "__main__":
                     ClearAutostart()),
         GarbageInfo("Datei Explorer", "Dateinamenerweiterungen immer anzeigen", "Zeigt den Dateitypen für jede Datei im Explorer.", ShowFileExtensions()),
         GarbageInfo("Datei Explorer", "Versteckte Dateien anzeigen", "Macht auch versteckte Dateien im Explorer sichtbar.", ShowHiddenFiles()),
-        #(None, GarbageInfo("Autostart Apps deaktivieren", "Deaktiviert alle Apps aus dem Autostart, entfernt sie aber nicht.", ClearAutoStart(), None)),
-        #("File Explorer", GarbageInfo("Dateinamenerweiterungen immer anzeigen", "Zeigt den Dateitypen für jede Datei im Explorer.", ShowFileExtensions(), None)),
-        #("File Explorer", GarbageInfo("Versteckte Dateien anzeigen", "Macht auch versteckte Dateien im Explorer sichtbar.", ShowHiddenFiles(), None)),
     ]
 
     root = Tk()

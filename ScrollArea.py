@@ -55,8 +55,6 @@ class ScrollArea(ttk.Frame):
             if checkbutton_is_child:
                 toggle_all_checkbutton.add_child_checkbox(checkbutton_variable)
 
-            print(f"{garbage_info.name} {checkbutton_is_child} {checkbutton_variable.get()}")
-
             # Add new Checkbutton
             checkbutton = self.add_checkbox(content_frame=content_frame, text=garbage_info.name, variable=checkbutton_variable, is_child=checkbutton_is_child)
 
