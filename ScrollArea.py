@@ -2,9 +2,10 @@ from tkinter import *
 from tkinter import ttk
 from typing import Tuple
 from ToggleAllCheckbutton import ToggleAllCheckbutton
+from GarbageInfo import GarbageInfo
 
 class ScrollArea(ttk.Frame):
-    def __init__(self, master, garbage_list) -> None:
+    def __init__(self, master, garbage_list: list[GarbageInfo]) -> None:
         super().__init__(master)
 
         s = ttk.Style()
@@ -26,29 +27,62 @@ class ScrollArea(ttk.Frame):
 
         content_frame_id = content_canvas.create_window((0, 0), window=content_frame, anchor=NW)
 
-        self.populate_list(content_frame=content_frame, list=garbage_list)
+        self.populate_list(content_frame=content_frame, garbage_list=garbage_list)
     
-    def populate_list(self, content_frame: ttk.Frame, list):
-        toggle_all = ToggleAllCheckbutton(master=content_frame, text="Toggle All", takefocus=False)
-        toggle_all.pack()
+    def populate_list(self, content_frame: ttk.Frame, garbage_list: list[GarbageInfo]):
+        last_parent_checkbox_name: str = None
+        index = 0
 
-        for number in range(1, 31):
-            pair = self.add_checkbox(content_frame=content_frame)
+        for garbage_info in garbage_list:
+            if garbage_info.parent_checkbox_name != last_parent_checkbox_name:
+                last_parent_checkbox_name = garbage_info.parent_checkbox_name
 
-            toggle_all.add_child_checkbox(pair[1])
+                if garbage_info.parent_checkbox_name != None:
+                    # Add new ToggleAllCheckbutton
+                    toggle_all_checkbutton: ToggleAllCheckbutton = self.add_toggle_all_checkbox(content_frame, garbage_info.parent_checkbox_name)
 
-            if number % 2 == 0:
-                pair[0].configure(style="alternate_background.TCheckbutton")
+                    if index % 2 == 0:
+                        toggle_all_checkbutton.configure(style="alternate_background.TCheckbutton")
 
-    def add_toggle_all_checkbox(self):
-        pass
+                    index += 1
+                else:
+                    # Reset ToggleAllCheckbutton
+                    toggle_all_checkbutton = None
 
-    def add_checkbox(self, content_frame: ttk.Frame) -> Tuple[ttk.Checkbutton, IntVar]:
-        value = IntVar(value=1)
-        checkbox = ttk.Checkbutton(content_frame, text="Clipchamp entfernen", takefocus=False, padding=(20, 5, 0, 5), variable=value)
-        checkbox.pack(fill=X)
+            checkbutton_is_child = toggle_all_checkbutton is not None
+            checkbutton_variable = IntVar(value=1)
 
-        return (checkbox, value)
+            if checkbutton_is_child:
+                toggle_all_checkbutton.add_child_checkbox(checkbutton_variable)
+
+            print(f"{garbage_info.name} {checkbutton_is_child} {checkbutton_variable.get()}")
+
+            # Add new Checkbutton
+            checkbutton = self.add_checkbox(content_frame=content_frame, text=garbage_info.name, variable=checkbutton_variable, is_child=checkbutton_is_child)
+
+            garbage_info.checkbutton_variable = checkbutton_variable
+
+            if index % 2 == 0:
+                checkbutton.configure(style="alternate_background.TCheckbutton")
+
+            index += 1
+
+    def add_toggle_all_checkbox(self, content_frame: ttk.Frame, text:str):
+        variable = IntVar(value=1)
+        checkbutton = ToggleAllCheckbutton(master=content_frame, text=text, takefocus=False, padding=(20, 5, 0, 5), variable=variable)
+        checkbutton.pack(fill=X)
+
+        return checkbutton
+
+    def add_checkbox(self, content_frame: ttk.Frame, text:str, variable: Variable, is_child: bool) -> ttk.Checkbutton:
+        if is_child:
+            checkbutton = ttk.Checkbutton(content_frame, text=text, takefocus=False, padding=(35, 5, 0, 5), variable=variable)
+        else:
+            checkbutton = ttk.Checkbutton(content_frame, text=text, takefocus=False, padding=(20, 5, 0, 5), variable=variable)
+
+        checkbutton.pack(fill=X)
+
+        return checkbutton
     
     def update_scrollbar_and_frame(self, canvas: Canvas, inner_frame: ttk.Frame, inner_frame_id: int):
         canvas.config(scrollregion=canvas.bbox("all"))

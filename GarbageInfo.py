@@ -1,17 +1,20 @@
 from dataclasses import dataclass
+from tkinter import IntVar
 from GarbageFix import GarbageFix
-from RemoveAppPackage import RemoveAppPackage
+from fixes.RemoveAppPackage import RemoveAppPackage
 
 @dataclass
 class GarbageInfo:
+    parent_checkbox_name: str
     name: str
     description: str
-    warning: bool
     fix: GarbageFix
+    checkbutton_variable: IntVar = None
+    warning: bool = False
 
 class RemoveAppPackageGarbageInfo(GarbageInfo):
-    def __init__(self, display_name: str, package_name: str, warning: bool = False) -> None:
-        self.name = f"{display_name} entfernen"
-        self.description = f"Diese Option deinstalliert {display_name}, wenn {display_name} installiert ist."
-        self.warning = warning
-        self.fix = RemoveAppPackage(package_name)
+    def __init__(self, display_name: str, package_name: str) -> None:
+        super().__init__("Programme deinstallieren", 
+                         f"{display_name} entfernen", 
+                         f"Diese Option deinstalliert {display_name}, wenn {display_name} installiert ist.", 
+                         RemoveAppPackage(package_name))

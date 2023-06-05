@@ -4,6 +4,9 @@ from tkinter import *
 from tkinter import ttk
 from GarbageInfo import *
 from ScrollArea import ScrollArea
+from fixes.ShowFileExtensions import ShowFileExtensions
+from fixes.ShowHiddenFiles import ShowHiddenFiles
+from fixes.ClearAutostart import ClearAutostart
 
 class MainWindow:
     def __init__(self, root: Tk) -> None:
@@ -38,7 +41,7 @@ class MainWindow:
         button_frame = ttk.Frame(main_frame, style="button_frame.TFrame", padding=(0, 7.5, 7.5, 7.5))
 
         ttk.Button(button_frame, text="Beenden", command=lambda: root.quit(), style="button_frame.TButton", takefocus=False).pack(side=RIGHT, padx=(7.5, 0))
-        ttk.Button(button_frame, text="Bestätigen", style="button_frame.TButton", takefocus=False).pack(side=RIGHT)
+        ttk.Button(button_frame, text="Bestätigen", command=self.confirm_action, style="button_frame.TButton", takefocus=False).pack(side=RIGHT)
 
         button_frame.pack(fill=X)
 
@@ -46,6 +49,9 @@ class MainWindow:
         s = ttk.Style(main_frame)
         s.configure("button_frame.TFrame", background="lightgrey")
         s.configure("button_frame.TButton", background="lightgrey")
+
+    def confirm_action(self):
+        print("continue")
 
     @staticmethod
     def is_admin():
@@ -56,52 +62,61 @@ class MainWindow:
         return is_admin
 
 if __name__ == "__main__":
-    garbage_list = [
-        ("Programme deinstallieren", RemoveAppPackageGarbageInfo("Clipchamp", "Clipchamp.Clipchamp"), None),
-        ("Programme deinstallieren", RemoveAppPackageGarbageInfo("Cortana", "Microsoft.549981C3F5F10")),
-        ("Programme deinstallieren", RemoveAppPackageGarbageInfo("Microsoft News", "Microsoft.BingNews")),
-        ("Programme deinstallieren", RemoveAppPackageGarbageInfo("Wetter", "Microsoft.BingWeather")),
-        ("Programme deinstallieren", RemoveAppPackageGarbageInfo("Xbox", "Microsoft.GamingApp")),
-        ("Programme deinstallieren", RemoveAppPackageGarbageInfo("Hilfe anfordern", "Microsoft.GetHelp")),
-        ("Programme deinstallieren", RemoveAppPackageGarbageInfo("Getstarted!!!", "Microsoft.Getstarted")), # erste schritte ist's nicht
-        ("Programme deinstallieren", RemoveAppPackageGarbageInfo("HEIF Image Extension!!!", "Microsoft.HEIFImageExtension")),
-        ("Programme deinstallieren", RemoveAppPackageGarbageInfo("HEVC Video Extension!!!", "Microsoft.HEVCVideoExtension")),
-        ("Programme deinstallieren", RemoveAppPackageGarbageInfo("Office", "Microsoft.MicrosoftOfficeHub")),
-        ("Programme deinstallieren", RemoveAppPackageGarbageInfo("Solitaire Collection", "Microsoft.MicrosoftSolitaireCollection")),
-        ("Programme deinstallieren", RemoveAppPackageGarbageInfo("Kurznotizen", "Microsoft.MicrosoftStickyNotes")),
-        ("Programme deinstallieren", RemoveAppPackageGarbageInfo("Paint", "Microsoft.Paint")),
-        ("Programme deinstallieren", RemoveAppPackageGarbageInfo("People!!!", "Microsoft.People")),
-        ("Programme deinstallieren", RemoveAppPackageGarbageInfo("Power Automate", "Microsoft.PowerAutomateDesktop")),
-        ("Programme deinstallieren", RemoveAppPackageGarbageInfo("Raw Image Extension!!!", "Microsoft.RawImageExtension")),
-        ("Programme deinstallieren", RemoveAppPackageGarbageInfo("Snipping Tool", "Microsoft.ScreenSketch")),
-        ("Programme deinstallieren", RemoveAppPackageGarbageInfo("Store Purchase App!!!", "Microsoft.StorePurchaseApp")), # nicht store
-        ("Programme deinstallieren", RemoveAppPackageGarbageInfo("Microsoft To Do", "Microsoft.Todos")),
-        ("Programme deinstallieren", RemoveAppPackageGarbageInfo("VP9 Video Extensions!!!", "Microsoft.VP9VideoExtensions")),
-        ("Programme deinstallieren", RemoveAppPackageGarbageInfo("Web Media Extensions!!!", "Microsoft.WebMediaExtensions")),
-        ("Programme deinstallieren", RemoveAppPackageGarbageInfo("Webp Image Extension!!!", "Microsoft.WebpImageExtension")),
-        ("Programme deinstallieren", RemoveAppPackageGarbageInfo("Windows-Fotoanzeige", "Microsoft.Windows.Photos")),
-        ("Programme deinstallieren", RemoveAppPackageGarbageInfo("Alarm und Uhr", "Microsoft.WindowsAlarms")),
-        ("Programme deinstallieren", RemoveAppPackageGarbageInfo("Rechner", "Microsoft.WindowsCalculator")),
-        ("Programme deinstallieren", RemoveAppPackageGarbageInfo("Kamera", "Microsoft.WindowsCamera")),
-        ("Programme deinstallieren", RemoveAppPackageGarbageInfo("MS Windows Communications Apps!!!", "microsoft.windowscommunicationsapps")),
-        ("Programme deinstallieren", RemoveAppPackageGarbageInfo("Feedback-Hub", "Microsoft.WindowsFeedbackHub")),
-        ("Programme deinstallieren", RemoveAppPackageGarbageInfo("Karten", "Microsoft.WindowsMaps")),
-        ("Programme deinstallieren", RemoveAppPackageGarbageInfo("Editor", "Microsoft.WindowsNotepad")), # not wordpad
-        ("Programme deinstallieren", RemoveAppPackageGarbageInfo("Sprachrekorder", "Microsoft.WindowsSoundRecorder")),
-        ("Programme deinstallieren", RemoveAppPackageGarbageInfo("Store", "Microsoft.WindowsStore")),
-        ("Programme deinstallieren", RemoveAppPackageGarbageInfo("Terminal", "Microsoft.WindowsTerminal")),
-        ("Programme deinstallieren", RemoveAppPackageGarbageInfo("Xbox Live", "Microsoft.Xbox.TCUI")),
-        ("Programme deinstallieren", RemoveAppPackageGarbageInfo("Xbox Game Overlay!!!", "Microsoft.XboxGameOverlay")),
-        ("Programme deinstallieren", RemoveAppPackageGarbageInfo("Xbox Game Bar", "Microsoft.XboxGamingOverlay")),
-        ("Programme deinstallieren", RemoveAppPackageGarbageInfo("Xbox Identity Provider!!!", "Microsoft.XboxIdentityProvider")),
-        ("Programme deinstallieren", RemoveAppPackageGarbageInfo("Xbox Speech To Text Overlay!!!", "Microsoft.XboxSpeechToTextOverlay")),
-        ("Programme deinstallieren", RemoveAppPackageGarbageInfo("Ihr Smartphone", "Microsoft.YourPhone")),
-        ("Programme deinstallieren", RemoveAppPackageGarbageInfo("Windows Media Player Lagecy", "Microsoft.ZuneMusic")),
-        ("Programme deinstallieren", RemoveAppPackageGarbageInfo("Filme und TV", "Microsoft.ZuneVideo")),
-        ("Programme deinstallieren", RemoveAppPackageGarbageInfo("Family", "MicrosoftCorporationII.MicrosoftFamily")),
-        ("Programme deinstallieren", RemoveAppPackageGarbageInfo("Remotehilfe", "MicrosoftCorporationII.QuickAssist")),
-        ("Programme deinstallieren", RemoveAppPackageGarbageInfo("Teams", "MicrosoftTeams")), # tips, spotify, onedrive, erste schritte
-        ("Programme deinstallieren", RemoveAppPackageGarbageInfo("Web Experience!!!", "MicrosoftWindows.Client.WebExperience"))
+    garbage_list: tuple[str, GarbageInfo, None] = [    
+        RemoveAppPackageGarbageInfo("Clipchamp", "Clipchamp.Clipchamp"),
+        RemoveAppPackageGarbageInfo("Cortana", "Microsoft.549981C3F5F10"),
+        RemoveAppPackageGarbageInfo("Microsoft News", "Microsoft.BingNews"),
+        RemoveAppPackageGarbageInfo("Wetter", "Microsoft.BingWeather"),
+        RemoveAppPackageGarbageInfo("Xbox", "Microsoft.GamingApp"),
+        RemoveAppPackageGarbageInfo("Hilfe anfordern", "Microsoft.GetHelp"),
+        RemoveAppPackageGarbageInfo("Getstarted!!!", "Microsoft.Getstarted"), # erste schritte ist's nicht
+        RemoveAppPackageGarbageInfo("HEIF Image Extension!!!", "Microsoft.HEIFImageExtension"),
+        RemoveAppPackageGarbageInfo("HEVC Video Extension!!!", "Microsoft.HEVCVideoExtension"),
+        RemoveAppPackageGarbageInfo("Office", "Microsoft.MicrosoftOfficeHub"),
+        RemoveAppPackageGarbageInfo("Solitaire Collection", "Microsoft.MicrosoftSolitaireCollection"),
+        RemoveAppPackageGarbageInfo("Kurznotizen", "Microsoft.MicrosoftStickyNotes"),
+        RemoveAppPackageGarbageInfo("Paint", "Microsoft.Paint"),
+        RemoveAppPackageGarbageInfo("People!!!", "Microsoft.People"),
+        RemoveAppPackageGarbageInfo("Power Automate", "Microsoft.PowerAutomateDesktop"),
+        RemoveAppPackageGarbageInfo("Raw Image Extension!!!", "Microsoft.RawImageExtension"),
+        RemoveAppPackageGarbageInfo("Snipping Tool", "Microsoft.ScreenSketch"),
+        RemoveAppPackageGarbageInfo("Store Purchase App!!!", "Microsoft.StorePurchaseApp"), # nicht store
+        RemoveAppPackageGarbageInfo("Microsoft To Do", "Microsoft.Todos"),
+        RemoveAppPackageGarbageInfo("VP9 Video Extensions!!!", "Microsoft.VP9VideoExtensions"),
+        RemoveAppPackageGarbageInfo("Web Media Extensions!!!", "Microsoft.WebMediaExtensions"),
+        RemoveAppPackageGarbageInfo("Webp Image Extension!!!", "Microsoft.WebpImageExtension"),
+        RemoveAppPackageGarbageInfo("Windows-Fotoanzeige", "Microsoft.Windows.Photos"),
+        RemoveAppPackageGarbageInfo("Alarm und Uhr", "Microsoft.WindowsAlarms"),
+        RemoveAppPackageGarbageInfo("Rechner", "Microsoft.WindowsCalculator"),
+        RemoveAppPackageGarbageInfo("Kamera", "Microsoft.WindowsCamera"),
+        RemoveAppPackageGarbageInfo("MS Windows Communications Apps!!!", "microsoft.windowscommunicationsapps"),
+        RemoveAppPackageGarbageInfo("Feedback-Hub", "Microsoft.WindowsFeedbackHub"),
+        RemoveAppPackageGarbageInfo("Karten", "Microsoft.WindowsMaps"),
+        RemoveAppPackageGarbageInfo("Editor", "Microsoft.WindowsNotepad"), # not wordpad
+        RemoveAppPackageGarbageInfo("Sprachrekorder", "Microsoft.WindowsSoundRecorder"),
+        RemoveAppPackageGarbageInfo("Store", "Microsoft.WindowsStore"),
+        RemoveAppPackageGarbageInfo("Terminal", "Microsoft.WindowsTerminal"),
+        RemoveAppPackageGarbageInfo("Xbox Live", "Microsoft.Xbox.TCUI"),
+        RemoveAppPackageGarbageInfo("Xbox Game Overlay!!!", "Microsoft.XboxGameOverlay"),
+        RemoveAppPackageGarbageInfo("Xbox Game Bar", "Microsoft.XboxGamingOverlay"),
+        RemoveAppPackageGarbageInfo("Xbox Identity Provider!!!", "Microsoft.XboxIdentityProvider"),
+        RemoveAppPackageGarbageInfo("Xbox Speech To Text Overlay!!!", "Microsoft.XboxSpeechToTextOverlay"),
+        RemoveAppPackageGarbageInfo("Smartphone-Link", "Microsoft.YourPhone"),
+        RemoveAppPackageGarbageInfo("Windows Media Player Legacy", "Microsoft.ZuneMusic"),
+        RemoveAppPackageGarbageInfo("Filme und TV", "Microsoft.ZuneVideo"),
+        RemoveAppPackageGarbageInfo("Family", "MicrosoftCorporationII.MicrosoftFamily"),
+        RemoveAppPackageGarbageInfo("Remotehilfe", "MicrosoftCorporationII.QuickAssist"),
+        RemoveAppPackageGarbageInfo("Teams", "MicrosoftTeams"), # tips, spotify, onedrive, erste schritte
+        RemoveAppPackageGarbageInfo("Web Experience!!!", "MicrosoftWindows.Client.WebExperience"),
+        GarbageInfo(None, 
+                    "Autostart Apps deaktivieren", 
+                    "Deaktiviert alle Apps aus dem Autostart, entfernt sie aber nicht. Gleich deaktivierter Apps im Task-Manager.", 
+                    ClearAutostart()),
+        GarbageInfo("Datei Explorer", "Dateinamenerweiterungen immer anzeigen", "Zeigt den Dateitypen für jede Datei im Explorer.", ShowFileExtensions()),
+        GarbageInfo("Datei Explorer", "Versteckte Dateien anzeigen", "Macht auch versteckte Dateien im Explorer sichtbar.", ShowHiddenFiles()),
+        #(None, GarbageInfo("Autostart Apps deaktivieren", "Deaktiviert alle Apps aus dem Autostart, entfernt sie aber nicht.", ClearAutoStart(), None)),
+        #("File Explorer", GarbageInfo("Dateinamenerweiterungen immer anzeigen", "Zeigt den Dateitypen für jede Datei im Explorer.", ShowFileExtensions(), None)),
+        #("File Explorer", GarbageInfo("Versteckte Dateien anzeigen", "Macht auch versteckte Dateien im Explorer sichtbar.", ShowHiddenFiles(), None)),
     ]
 
     root = Tk()
