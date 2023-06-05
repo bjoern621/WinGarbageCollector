@@ -6,12 +6,12 @@ from RemoveAppPackage import RemoveAppPackage
 class GarbageInfo:
     name: str
     description: str
-    high_impact: bool
+    warning: bool
     fix: GarbageFix
 
 class RemoveAppPackageGarbageInfo(GarbageInfo):
-    def __init__(self, display_name: str, package_name: str, high_impact: bool) -> None:
+    def __init__(self, display_name: str, package_name: str, warning: bool = False) -> None:
         self.name = f"{display_name} entfernen"
         self.description = f"Diese Option deinstalliert {display_name}, wenn {display_name} installiert ist."
-        self.high_impact = high_impact
+        self.warning = warning
         self.fix = RemoveAppPackage(package_name)
