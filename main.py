@@ -3,6 +3,7 @@ import os
 import sys
 from tkinter import *
 from tkinter import ttk
+from tkinter import messagebox
 from GarbageInfo import *
 from ScrollArea import ScrollArea
 from fixes.ShowFileExtensions import ShowFileExtensions
@@ -39,7 +40,7 @@ class MainWindow:
         ScrollArea(main_frame, garbage_list).pack(expand=True, fill=BOTH)
 
         # Button area
-        button_frame = ttk.Frame(main_frame, style="button_frame.TFrame", padding=(0, 7.5, 7.5, 7.5))
+        button_frame = ttk.Frame(main_frame, style="button_frame.TFrame", padding=(0, 7.5, 15, 7.5))
 
         ttk.Button(button_frame, text="Beenden", command=lambda: root.quit(), style="button_frame.TButton", takefocus=False).pack(side=RIGHT, padx=(7.5, 0))
         ttk.Button(button_frame, text="Bestätigen", command=self.run_garbage_collector, style="button_frame.TButton", takefocus=False).pack(side=RIGHT)
@@ -52,9 +53,28 @@ class MainWindow:
         s.configure("button_frame.TButton", background="lightgrey")
 
     def run_garbage_collector(self):
-        for item in garbage_list:
-            #print(item)
+        response = messagebox.askokcancel("Bist du sicher?", 
+                                          "Das Programm nimmt unumkehrbare Änderungen vor.\n"
+                                          "Bist du sicher, dass du fortfahren möchtest?")
+        
+        if response == False:
             return
+
+        for garbage_info in garbage_list:
+            if garbage_info.checkbutton_variable.get() == False:
+                continue
+
+            result = garbage_info.fix.execute()
+
+            if result:
+                # Show error message
+                messagebox.showwarning("Fehler", 
+                                       "Mindestens eine Option benötigt erweiterte Rechte.\n"
+                                       "Bitte starte das Programm mit Administratorrechten neu oder ändere die Auswahl.")
+                return
+        
+        # Show success message
+        messagebox.showinfo("You're set!", "Alle ausgewählten Optionen wurden erfolgreich ausgeführt.")
 
     @staticmethod
     def is_admin():
