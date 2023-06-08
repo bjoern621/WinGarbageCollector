@@ -27,7 +27,7 @@ class ScrollArea(ttk.Frame):
 
         content_frame_id = content_canvas.create_window((0, 0), window=content_frame, anchor=NW)
 
-        self.populate_list(content_frame=content_frame, garbage_list=garbage_list)
+        self.populate_list(content_frame, garbage_list)
     
     def populate_list(self, content_frame: ttk.Frame, garbage_list: list[GarbageInfo]):
         last_parent_checkbox_name: str = None

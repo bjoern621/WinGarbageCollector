@@ -12,7 +12,6 @@ class ShowHiddenFiles(GarbageFix):
             return 1
 
         winreg.SetValueEx(open_key, "Hidden", 0, winreg.REG_DWORD, preferred_value)
-
         winreg.CloseKey(open_key)
 
         return 0

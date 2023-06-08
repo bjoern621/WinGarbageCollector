@@ -9,6 +9,7 @@ from ScrollArea import ScrollArea
 from fixes.ShowFileExtensions import ShowFileExtensions
 from fixes.ShowHiddenFiles import ShowHiddenFiles
 from fixes.ClearAutostart import ClearAutostart
+from fixes.NoSoundsScheme import NoSoundsScheme
 
 class MainWindow:
     def __init__(self, root: Tk) -> None:
@@ -68,7 +69,7 @@ class MainWindow:
 
             if result:
                 # Show error message
-                messagebox.showwarning("Fehler", 
+                messagebox.showwarning("Zugriff verweigert", 
                                        "Mindestens eine Option benötigt erweiterte Rechte.\n"
                                        "Bitte starte das Programm mit Administratorrechten neu oder ändere die Auswahl.")
                 return
@@ -103,22 +104,21 @@ if __name__ == "__main__":
         RemoveAppPackageGarbageInfo("Wetter", "Microsoft.BingWeather"),
         RemoveAppPackageGarbageInfo("Xbox", "Microsoft.GamingApp"),
         RemoveAppPackageGarbageInfo("Hilfe anfordern", "Microsoft.GetHelp"),
-        RemoveAppPackageGarbageInfo("Getstarted!!!", "Microsoft.Getstarted"), # erste schritte ist's nicht
-        RemoveAppPackageGarbageInfo("HEIF Image Extension!!!", "Microsoft.HEIFImageExtension"),
-        RemoveAppPackageGarbageInfo("HEVC Video Extension!!!", "Microsoft.HEVCVideoExtension"),
+        RemoveAppPackageGarbageInfo("Tips", "Microsoft.Getstarted"), # erste schritte ist's nicht TIpps
+        RemoveAppPackageGarbageInfo("HEIF Image Extension", "Microsoft.HEIFImageExtension"),
+        RemoveAppPackageGarbageInfo("HEVC Video Extension", "Microsoft.HEVCVideoExtension"),
+        RemoveAppPackageGarbageInfo("VP9 Video Extensions", "Microsoft.VP9VideoExtensions"),
+        RemoveAppPackageGarbageInfo("Web Media Extensions", "Microsoft.WebMediaExtensions"),
+        RemoveAppPackageGarbageInfo("Webp Image Extension", "Microsoft.WebpImageExtension"),
+        RemoveAppPackageGarbageInfo("Raw Image Extension", "Microsoft.RawImageExtension"),
         RemoveAppPackageGarbageInfo("Office", "Microsoft.MicrosoftOfficeHub"),
         RemoveAppPackageGarbageInfo("Solitaire Collection", "Microsoft.MicrosoftSolitaireCollection"),
         RemoveAppPackageGarbageInfo("Kurznotizen", "Microsoft.MicrosoftStickyNotes"),
         RemoveAppPackageGarbageInfo("Paint", "Microsoft.Paint"),
-        RemoveAppPackageGarbageInfo("People!!!", "Microsoft.People"),
+        RemoveAppPackageGarbageInfo("Kontakte", "Microsoft.People"),
         RemoveAppPackageGarbageInfo("Power Automate", "Microsoft.PowerAutomateDesktop"),
-        RemoveAppPackageGarbageInfo("Raw Image Extension!!!", "Microsoft.RawImageExtension"),
         RemoveAppPackageGarbageInfo("Snipping Tool", "Microsoft.ScreenSketch"),
-        RemoveAppPackageGarbageInfo("Store Purchase App!!!", "Microsoft.StorePurchaseApp"), # nicht store
         RemoveAppPackageGarbageInfo("Microsoft To Do", "Microsoft.Todos"),
-        RemoveAppPackageGarbageInfo("VP9 Video Extensions!!!", "Microsoft.VP9VideoExtensions"),
-        RemoveAppPackageGarbageInfo("Web Media Extensions!!!", "Microsoft.WebMediaExtensions"),
-        RemoveAppPackageGarbageInfo("Webp Image Extension!!!", "Microsoft.WebpImageExtension"),
         RemoveAppPackageGarbageInfo("Windows-Fotoanzeige", "Microsoft.Windows.Photos"),
         RemoveAppPackageGarbageInfo("Alarm und Uhr", "Microsoft.WindowsAlarms"),
         RemoveAppPackageGarbageInfo("Rechner", "Microsoft.WindowsCalculator"),
@@ -128,26 +128,26 @@ if __name__ == "__main__":
         RemoveAppPackageGarbageInfo("Karten", "Microsoft.WindowsMaps"),
         RemoveAppPackageGarbageInfo("Editor", "Microsoft.WindowsNotepad"), # not wordpad
         RemoveAppPackageGarbageInfo("Sprachrekorder", "Microsoft.WindowsSoundRecorder"),
-        RemoveAppPackageGarbageInfo("Store", "Microsoft.WindowsStore"),
         RemoveAppPackageGarbageInfo("Terminal", "Microsoft.WindowsTerminal"),
         RemoveAppPackageGarbageInfo("Xbox Live", "Microsoft.Xbox.TCUI"),
-        RemoveAppPackageGarbageInfo("Xbox Game Overlay!!!", "Microsoft.XboxGameOverlay"),
+        RemoveAppPackageGarbageInfo("Xbox Game Overlay", "Microsoft.XboxGameOverlay"),
         RemoveAppPackageGarbageInfo("Xbox Game Bar", "Microsoft.XboxGamingOverlay"),
-        RemoveAppPackageGarbageInfo("Xbox Identity Provider!!!", "Microsoft.XboxIdentityProvider"),
-        RemoveAppPackageGarbageInfo("Xbox Speech To Text Overlay!!!", "Microsoft.XboxSpeechToTextOverlay"),
+        RemoveAppPackageGarbageInfo("Xbox Identity Provider", "Microsoft.XboxIdentityProvider"),
+        RemoveAppPackageGarbageInfo("Xbox Speech To Text Overlay", "Microsoft.XboxSpeechToTextOverlay"),
         RemoveAppPackageGarbageInfo("Smartphone-Link", "Microsoft.YourPhone"),
         RemoveAppPackageGarbageInfo("Windows Media Player Legacy", "Microsoft.ZuneMusic"),
         RemoveAppPackageGarbageInfo("Filme und TV", "Microsoft.ZuneVideo"),
         RemoveAppPackageGarbageInfo("Family", "MicrosoftCorporationII.MicrosoftFamily"),
         RemoveAppPackageGarbageInfo("Remotehilfe", "MicrosoftCorporationII.QuickAssist"),
-        RemoveAppPackageGarbageInfo("Teams", "MicrosoftTeams"), # tips, spotify, onedrive, erste schritte
-        RemoveAppPackageGarbageInfo("Web Experience!!!", "MicrosoftWindows.Client.WebExperience"),
+        RemoveAppPackageGarbageInfo("Teams", "MicrosoftTeams"), # tips, spotify, onedrive, erste schritte, no sounds, taskbar, startmenu
+        RemoveAppPackageGarbageInfo("Web Experience", "MicrosoftWindows.Client.WebExperience"),
         GarbageInfo(None, 
                     "Autostart Apps deaktivieren", 
                     "Deaktiviert alle Apps aus dem Autostart, entfernt sie aber nicht. Gleich deaktivierter Apps im Task-Manager.", 
                     ClearAutostart()),
         GarbageInfo("Datei Explorer", "Dateinamenerweiterungen immer anzeigen", "Zeigt den Dateitypen für jede Datei im Explorer.", ShowFileExtensions()),
         GarbageInfo("Datei Explorer", "Versteckte Dateien anzeigen", "Macht auch versteckte Dateien im Explorer sichtbar.", ShowHiddenFiles()),
+        GarbageInfo(None, "Sounds deaktivieren", "", NoSoundsScheme())
     ]
 
     root = Tk()
